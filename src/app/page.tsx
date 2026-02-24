@@ -72,7 +72,7 @@ export default function Home() {
                 <path d="M12 4.54541C16.1158 4.54541 19.4546 7.88414 19.4546 12C19.4546 16.1158 16.1158 19.4546 12 19.4546C7.88414 19.4546 4.54541 16.1158 4.54541 12C4.54541 7.88414 7.88414 4.54541 12 4.54541Z" fill="black" />
                 <rect x="10.5" y="7" width="3" height="10" rx="1" fill="white" />
               </svg>
-              <span>PAY WITH CRYPTO</span>
+              <span>BUY WITH CRYPTO</span>
             </span>
           </a>
         </div>
