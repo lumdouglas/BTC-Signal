@@ -1,135 +1,82 @@
-import Image from "next/image";
-import Header from "@/components/layout/Header";
-import PixelArtDisplay from "@/components/ui/PixelArtDisplay";
-import LivePriceTicker from "@/components/ui/LivePriceTicker";
+"use client";
+
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detect when user scrolls down to reveal the payment button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-brand-base flex flex-col relative overflow-hidden">
-      <Header />
+    <main className="min-h-[150vh] bg-black relative cursor-default overflow-x-hidden">
+      {/* 
+        Fixed Background Video
+      */}
+      <div className="fixed top-0 left-0 w-full h-screen z-0">
+        <div className="absolute inset-0 z-10 crt-overlay pointer-events-none" />
 
-      {/* Hero Section — "THE SIGNAL" */}
-      <section className="relative w-full min-h-screen pt-20 flex items-center">
-        {/* Full Viewport CRT Overlay */}
-        <div className="absolute inset-0 crt-overlay pointer-events-none z-10" />
+        {/* Deep vignettes */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-x from-black/60 via-transparent to-black/60 z-10" />
 
-        <div className="max-w-[1280px] mx-auto w-full px-6 grid grid-cols-1 md:grid-cols-12 gap-6 relative z-20">
-
-          {/* Left Column - 60% (7 cols) */}
-          <div className="md:col-span-7 flex flex-col justify-center order-2 md:order-1 pt-12 md:pt-0">
-            <div className="mb-4">
-              <span className="font-mono text-brand-green text-xs tracking-[0.15em] uppercase border border-brand-green/30 px-2 py-1 bg-brand-green/5">
-                [ WEARABLE HARDWARE // SERIES 001 ]
-              </span>
-            </div>
-
-            <h1 className="font-plex-mono text-[48px] md:text-[72px] leading-[0.9] text-white font-bold mb-6 tracking-tight glitch-text relative">
-              <span className="block">YOUR CONVICTION.</span>
-              <span className="block text-brand-secondary/80">ON YOUR CHEST.</span>
-            </h1>
-
-            <p className="font-sans text-[#999999] text-[18px] max-w-[480px] leading-relaxed mb-10">
-              Live Bitcoin price. Cellular data. No phone required. Real-time, always on.
-            </p>
-
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
-              <button className="bg-brand-orange text-black font-mono font-bold h-[52px] px-8 hover:bg-white transition-colors duration-300">
-                [ ACQUIRE ]
-              </button>
-              <button className="border border-white/20 text-white font-mono h-[52px] px-8 hover:border-white hover:bg-white/5 transition-colors duration-300">
-                [ HOW IT WORKS &rarr; ]
-              </button>
-            </div>
-
-            <div className="border-t border-white/10 pt-6">
-              <LivePriceTicker coin="bitcoin" />
-            </div>
-          </div>
-
-          {/* Right Column - 40% (5 cols) - Boy walking video representation */}
-          <div className="md:col-span-5 relative h-[500px] md:h-[700px] w-full order-1 md:order-2 self-center rounded-sm overflow-hidden group border border-white/5 shadow-2xl">
-            {/* The underlying "video" poster image */}
-            <Image
-              src="/hero-video-poster.png"
-              alt="Young boy wearing BTC hat walking in dark moody street"
-              fill
-              className="object-cover object-center transform group-hover:scale-105 transition-transform duration-1000 grayscale brightness-75 contrast-125"
-              priority
-            />
-
-            {/* Dark gradient to blend the image */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-base via-transparent to-transparent z-10"></div>
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-base z-10"></div>
-
-            {/* The flashing LED matrix on the shirt */}
-            <div className="absolute top-[55%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full flex justify-center perspective-[1000px]">
-              <div className="transform rotate-x-6 rotate-y-[-10deg]">
-                <PixelArtDisplay
-                  text="$169,420"
-                  animate={true}
-                  color="#F7931A" // Use Bitcoin orange for the vibe
-                  className="scale-75 md:scale-100 drop-shadow-[0_0_20px_rgba(247,147,26,0.5)]"
-                />
-              </div>
-            </div>
-
-            {/* Technical Annotations */}
-            <div className="absolute top-[20%] right-[-10%] z-20 hidden md:block opacity-60 hover:opacity-100 transition-opacity">
-              <div className="font-mono text-[10px] text-white bg-black/80 px-2 py-1 border border-white/20">GPIO 23 // DATA</div>
-              <div className="h-px w-16 bg-white/20 absolute right-full top-1/2"></div>
-            </div>
-
-            <div className="absolute bottom-[20%] left-[-10%] z-20 hidden md:block opacity-60 hover:opacity-100 transition-opacity">
-              <div className="font-mono text-[10px] text-brand-green bg-black/80 px-2 py-1 border border-brand-green/30">CAT-M1 // CELLULAR</div>
-              <div className="h-px w-24 bg-brand-green/30 absolute left-full top-1/2"></div>
-            </div>
-          </div>
-
+        <div className="relative w-full h-full bg-black">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className={`absolute inset-0 w-full h-full object-cover object-center pointer-events-none transition-all duration-700 ease-in-out ${scrolled ? "grayscale" : "grayscale-0"
+              }`}
+          >
+            <source src="/hero-video-website.mp4" type="video/mp4" />
+          </video>
         </div>
+      </div>
 
-        <div className="absolute bottom-8 left-0 right-0 text-center animate-bounce z-20">
-          <span className="font-mono text-[10px] text-white/50 tracking-widest uppercase">
-            &#9660; Scroll
-          </span>
+      {/* Hero Content (Fades out immediately on scroll) */}
+      <div
+        className={`fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-end pb-12 z-20 pointer-events-none transition-opacity duration-300 ease-out ${scrolled ? "opacity-0" : "opacity-100"
+          }`}
+      >
+        <div className="animate-bounce flex flex-col items-center space-y-3 opacity-60">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
         </div>
-      </section>
+      </div>
 
-      {/* Section 2 — "THE PROBLEM" */}
-      <section className="py-32 border-t border-white/5 relative z-20 bg-brand-base">
-        <div className="max-w-[800px] mx-auto px-6 text-center">
-          <span className="font-mono text-xs tracking-[0.15em] text-[#666] mb-8 block">
-            [ SIGNAL VS NOISE ]
-          </span>
-          <h2 className="font-plex-mono text-3xl md:text-5xl font-bold mb-12">
-            Everyone talks about Bitcoin.<br />
-            <span className="text-brand-orange">You wear the proof.</span>
-          </h2>
-          <div className="space-y-6 text-[#999] font-sans text-lg mb-20 leading-relaxed text-left max-w-[600px] mx-auto">
-            <p>
-              In a sea of noise, conviction is quiet but unmistakable. We built the Series 001 not as a t-shirt, but as a hardware broadcast node.
-            </p>
-            <p>
-              Whether you're stacking sats or building the infrastructure of the future, the Signal Apparel Matrix is the ultimate proof of work.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-y border-white/5">
-            <div className="flex flex-col items-center">
-              <span className="font-jetbrains text-4xl font-bold text-white mb-2">256</span>
-              <span className="font-mono text-xs text-[#666] uppercase tracking-widest">LED pixels</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-jetbrains text-4xl font-bold text-white mb-2">60s</span>
-              <span className="font-mono text-xs text-[#666] uppercase tracking-widest">Update interval</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-jetbrains text-4xl font-bold text-white mb-2">6hr</span>
-              <span className="font-mono text-xs text-[#666] uppercase tracking-widest">Battery life</span>
-            </div>
-          </div>
+      {/* Scrollable Content Area: Purely the checkout button */}
+      <div className="relative z-30 pt-[75vh] pb-32 w-full flex flex-col items-center justify-center px-6 pointer-events-none">
+        <div className={`transition-all duration-700 pointer-events-auto transform ${scrolled ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+          <a
+            href="https://commerce.coinbase.com/checkout"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center bg-black hover:bg-[#111] text-white border border-white/20 font-mono text-sm tracking-widest h-16 px-12 transition-all duration-300 hover:border-brand-orange hover:shadow-[0_0_20px_rgba(247,147,26,0.2)]"
+          >
+            <span className="flex items-center space-x-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="white" />
+                <path d="M12 4.54541C16.1158 4.54541 19.4546 7.88414 19.4546 12C19.4546 16.1158 16.1158 19.4546 12 19.4546C7.88414 19.4546 4.54541 16.1158 4.54541 12C4.54541 7.88414 7.88414 4.54541 12 4.54541Z" fill="black" />
+                <rect x="10.5" y="7" width="3" height="10" rx="1" fill="white" />
+              </svg>
+              <span>PAY WITH CRYPTO</span>
+            </span>
+          </a>
         </div>
-      </section>
-
+      </div>
     </main>
   );
 }
